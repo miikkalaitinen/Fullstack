@@ -1,4 +1,4 @@
-#Puhelinluettelon back+frontend versio
+# Puhelinluettelon back+frontend versio
 
 App pyörii [Herokussa](https://pure-scrubland-61280.herokuapp.com/).
 
