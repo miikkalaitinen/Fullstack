@@ -60,14 +60,13 @@ const App = () => {
       .then(res => {
         setPersons(persons.concat(res))
         notify(`Added ${person.name} with number ${person.number}`,true)
+        setNewName('')
+        setNewNumber('')
       })
       .catch(err => {
         console.log(err)
-        notify(`Failed to add ${person.name}`,false)
+        notify(`Failed to add ${person.name}. ${err.response.data.err}`,false,5)
       })
-
-      setNewName('')
-      setNewNumber('')
     }
 
   }
@@ -79,17 +78,19 @@ const App = () => {
     services.updatePerson(id,person)
     .then(res => {
       notify(`Updated ${person.name}'s phone number to ${person.number}`,true)
-      setPersons(persons.map(person => person.id !== res.id ? person : res))
+      setPersons(persons.map(guy => guy.id !== res.id ? guy : res))
+      setNewName('')
+      setNewNumber('')
     })
     .catch(err => {
       console.log(err)
-      notify(`Failed to update ${person.name}'s phone number to ${person.number}`,false)
+      notify(`Failed to update ${person.name}'s phone number to ${person.number}. ${err.response.data.err}`,false,5)
     })
   }
 
-  const notify = (message, type) => {
+  const notify = (message, type, seconds = 3) => {
     setNotification({message: message, type: type})
-    setTimeout(() => setNotification({message: null, type: null}),3000)
+    setTimeout(() => setNotification({message: null, type: null}),seconds*1000)
   }
 
   return (
