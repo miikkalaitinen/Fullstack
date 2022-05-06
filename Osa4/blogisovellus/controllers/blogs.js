@@ -29,30 +29,40 @@ blogRouter.post('/', middleware.tokenExtractor, async (request, response) => {
 blogRouter.delete('/:id', middleware.tokenExtractor, async (request, response) => {
 
     const id = request.params.id
-
     const blog = await Blog.findById(id)
 
     if(!blog) return response.status(400).json({ error : 'No such blog' })
     if(blog.user.toString() !== request.id.toString()) return response.status(400).json({ error : 'Invalid Token' })
 
-    await Blog.findByIdAndDelete(id)
-    const blogs = await Blog.find({})
-    response.status(200).json(blogs)
+    else {
+        await Blog.findByIdAndDelete(id)
+        const blogs = await Blog.find({})
+        response.status(200).json(blogs)  
+    }
 })
 
-blogRouter.put('/:id', middleware.tokenExtractor,async (request, response) => {
+blogRouter.put('/:id', middleware.tokenExtractor , async (request, response) => {
 
     const id = request.params.id
     const body = request.body
 
     const blog = await Blog.findById(id)
 
-    if(blog.user.toString() !== request.id.toString()) return response.status(400).json({ error : 'Invalid Token' })
-    
-    await Blog.findByIdAndUpdate(id,body,{ new: true, runValidators: true, context: 'query' })
+    if(!blog) return response.status(400).json({ error : 'No such blog' })
 
-    const blogs = await Blog.find({})
-    response.status(201).json(blogs)
+    if(blog.title.toString() === body.title.toString() && blog.author.toString() === body.author.toString() && body.url.toString() === body.url.toString()) {
+        await Blog.findByIdAndUpdate(id, body,{ new: true, context: 'query' })
+
+        const blogs = await Blog.find({})
+        response.status(201).json(blogs)
+    }
+    else {
+        if(blog.user.toString() !== request.id.toString()) return response.status(400).json({ error : 'Invalid Token' })
+
+        await await Blog.findByIdAndUpdate(id,body,{ new: true, runValidators: true, context: 'query' })
+        const blogs = await Blog.find({})
+        response.status(201).json(blogs)
+    }
 })
 
 module.exports = blogRouter
