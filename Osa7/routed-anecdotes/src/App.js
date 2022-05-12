@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useField } from './hooks'
 import { BrowserRouter as Router, Routes, Route, Link, useParams, useNavigate } from 'react-router-dom'
 
 const Menu = () => {
@@ -49,20 +50,26 @@ const CreateNew = (props) => {
 
   const navigate = useNavigate()
 
-  const [content, setContent] = useState('')
-  const [author, setAuthor] = useState('')
-  const [info, setInfo] = useState('')
+  const {reset: creset, ...crest } = useField('text')
+  const {reset: areset, ...arest } = useField('text')
+  const {reset: ireset, ...irest } = useField('text')
 
 
   const handleSubmit = (e) => {
     e.preventDefault()
     props.addNew({
-      content,
-      author,
-      info,
+      content: crest.value,
+      author: arest.value,
+      info: irest.value,
       votes: 0
     })
     navigate('/')
+  }
+
+  const handleReset = () => {
+    creset()
+    areset()
+    ireset()
   }
 
   return (
@@ -71,18 +78,19 @@ const CreateNew = (props) => {
       <form onSubmit={handleSubmit}>
         <div>
           content
-          <input name='content' value={content} onChange={(e) => setContent(e.target.value)} />
+          <input {...crest}/>
         </div>
         <div>
           author
-          <input name='author' value={author} onChange={(e) => setAuthor(e.target.value)} />
+          <input {...arest} />
         </div>
         <div>
           url for more info
-          <input name='info' value={info} onChange={(e)=> setInfo(e.target.value)} />
+          <input {...irest} />
         </div>
-        <button>create</button>
+        <button type="submit">create</button>
       </form>
+      <button onClick={() => handleReset()}>reset</button>
     </div>
   )
 
