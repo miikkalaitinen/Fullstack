@@ -1,0 +1,22 @@
+.notif{
+    border: 3px solid;
+    width: 100%;
+    text-align: center;
+    padding: 5px 0px 5px 0px;
+    background-color: lightgrey;
+    margin: 5px 0px 20px 0px;
+}
+
+.confirm{
+    color: green;
+    border-color: green;
+}
+
+.error{
+    color: red;
+    border-color: red;
+}
+
+.hidden{
+    visibility: hidden;
+}
