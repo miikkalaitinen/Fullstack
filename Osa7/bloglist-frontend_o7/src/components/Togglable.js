@@ -1,21 +1,16 @@
-import { useState, useImperativeHandle, forwardRef } from 'react'
-import PropTypes from 'prop-types'
+import { useDispatch, useSelector } from 'react-redux'
+import { toggle } from '../reducers/toggableReducer'
 
-const Togglable = forwardRef((props, ref) => {
-  const [visible, setVisible] = useState(false)
+const Togglable = (props) => {
+  const visible = useSelector(state => state.togglable)
+  const dispatch = useDispatch()
 
   const hideWhenVisible = { display: visible ? 'none' : '' }
   const showWhenVisible = { display: visible ? '' : 'none' }
 
   const toggleVisibility = () => {
-    setVisible(!visible)
+    dispatch(toggle())
   }
-
-  useImperativeHandle(ref, () => {
-    return {
-      toggleVisibility
-    }
-  })
 
   return (
     <div>
@@ -28,10 +23,6 @@ const Togglable = forwardRef((props, ref) => {
       </div>
     </div>
   )
-})
-
-Togglable.propTypes = {
-  buttonLabel: PropTypes.string.is
 }
 
 Togglable.displayName = 'Togglable'

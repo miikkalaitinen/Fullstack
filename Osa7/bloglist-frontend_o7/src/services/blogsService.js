@@ -19,6 +19,7 @@ const postNew = async (newBlog) => {
 }
 
 const updateBlog = async (id, newBlog) => {
+  console.log(newBlog)
   const currentToken = token
   const response = await axios.put(`${ baseUrl }/${id}`, newBlog,  { headers: { authorization: currentToken } })
   return response.data

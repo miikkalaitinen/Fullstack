@@ -56,10 +56,11 @@ blogRouter.put('/:id', middleware.tokenExtractor , async (request, response) => 
         const blogs = await Blog.find({})
         response.status(201).json(blogs)
     }
+    
     else {
         if(blog.user.toString() !== request.id.toString()) return response.status(400).json({ error : 'Invalid Token' })
 
-        await await Blog.findByIdAndUpdate(id,body,{ new: true, runValidators: true, context: 'query' })
+        await await Blog.findByIdAndUpdate(id, body,{ new: true, runValidators: true, context: 'query' })
         const blogs = await Blog.find({})
         response.status(201).json(blogs)
     }

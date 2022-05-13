@@ -1,5 +1,10 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
+import { useDispatch } from 'react-redux'
+import { setNotifications } from "./reducers/notificationReducer";
+import { initializeBlogs } from "./reducers/blogReducer";
+import  { Routes, Route, Link } from "react-router-dom"
 import Blogs from "./components/Blogs";
+import Users from "./components/Users";
 import LoginForm from "./components/LoginForm";
 import BlogForm from "./components/BlogForm";
 import loginService from "./services/loginService";
@@ -7,26 +12,31 @@ import blogService from "./services/blogsService";
 import Notification from "./components/Notification";
 import Togglable from "./components/Togglable";
 
+const Main = () => {
+  return(
+    <>
+      <Blogs/>
+      <Togglable buttonLabel={"New note"}>
+        <BlogForm />
+      </Togglable>
+    </>
+  )
+}
+
 const App = () => {
-  const [blogs, setBlogs] = useState([]);
+
+  const dispatch = useDispatch()
+
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [user, setUser] = useState(null);
-  const [notification, setNotification] = useState({
-    message: null,
-    type: null,
-  });
-
-  const noteFormRef = useRef();
-  const newBlogRef = useRef();
 
   useEffect(() => {
-    blogService.getAll().then((blogs) => setBlogs(blogs));
-  }, []);
+    dispatch(initializeBlogs())
+  }, [dispatch]);
 
   useEffect(() => {
     const loggedUser = window.localStorage.getItem("bloguser");
-
     if (loggedUser) {
       const user = JSON.parse(loggedUser);
       setUser(user);
@@ -35,11 +45,7 @@ const App = () => {
   }, []);
 
   const notify = (message, type, seconds = 3) => {
-    setNotification({ message: message, type: type });
-    setTimeout(
-      () => setNotification({ message: null, type: null }),
-      seconds * 1000
-    );
+    dispatch(setNotifications(message, type, seconds*1000));
   };
 
   const handleLogin = async (e) => {
@@ -62,56 +68,15 @@ const App = () => {
     }
   };
 
-  const handlePostBlog = async (noteObject) => {
-    const newBlog = noteObject;
-
-    try {
-      const newBlogs = await blogService.postNew(newBlog);
-      notify(
-        `Added your new blog ${newBlog.title}  by ${newBlog.author}`,
-        true
-      );
-      setBlogs(newBlogs);
-      noteFormRef.current.toggleVisibility();
-    } catch (err) {
-      notify(`Failed to add blog ${err}`, false);
-    }
-  };
-
   const handleLogout = async () => {
     window.localStorage.removeItem("bloguser");
     setUser(null);
     notify("Logged out", true);
   };
 
-  const handleLikeBlog = async (likedBlog) => {
-    const newBlog = {
-      ...likedBlog,
-      likes: likedBlog.likes + 1,
-    };
-
-    try {
-      const newBlogs = await blogService.updateBlog(newBlog.id, newBlog);
-      notify(`Liked blog ${newBlog.title} by ${newBlog.author}`, true);
-      setBlogs(newBlogs);
-    } catch (err) {
-      notify(`Failed to like blog ${err}`, false);
-    }
-  };
-
-  const handleDeleteBlog = async (blog) => {
-    try {
-      const newBlogs = await blogService.deleteBlog(blog.id);
-      notify(`Deleted blog ${blog.title} by ${blog.author}`, true);
-      setBlogs(newBlogs);
-    } catch (err) {
-      notify(`Failed to delete blog, ${err}`, false);
-    }
-  };
-
   return (
     <div>
-      <Notification notification={notification} />
+      <Notification/>
       {!user ? (
         <LoginForm
           username={username}
@@ -123,17 +88,14 @@ const App = () => {
       ) : (
         <>
           <p>
-            Logged in as {user.username}{" "}
+            Logged in as <Link to="/users">{user.username}</Link>{" "}
             <button onClick={handleLogout}> Logout </button>{" "}
           </p>
-          <Blogs
-            blogs={blogs}
-            likeBlog={handleLikeBlog}
-            deleteBlog={handleDeleteBlog}
-          />
-          <Togglable buttonLabel={"New note"} ref={noteFormRef}>
-            <BlogForm handlePostBlog={handlePostBlog} ref={newBlogRef} />
-          </Togglable>
+          <Routes>
+            <Route path="/" element={<Main />}/>
+            <Route path="/users" element={<Users />}/>
+            <Route path="/users/:id" element={<Main />}/>
+          </Routes>
         </>
       )}
     </div>

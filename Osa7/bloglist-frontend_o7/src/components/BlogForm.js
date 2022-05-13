@@ -1,7 +1,12 @@
 import { useState } from 'react'
+import { setNotifications } from '../reducers/notificationReducer'
+import { createBlog } from '../reducers/blogReducer'
+import { toggle } from '../reducers/toggableReducer'
+import { useDispatch } from 'react-redux'
 
-const BlogForm = ({ handlePostBlog }) => {
+const BlogForm = () => {
 
+  const dispatch = useDispatch()
 
   const [newBlog, setNewBlog] = useState({ title : '', author : '', url : '' })
 
@@ -16,6 +21,18 @@ const BlogForm = ({ handlePostBlog }) => {
     handlePostBlog(newBlog)
     clearForm()
   }
+
+  const handlePostBlog = async (noteObject) => {
+    const newBlog = noteObject;
+
+    try {
+      dispatch(setNotifications(`Added your new blog ${newBlog.title}  by ${newBlog.author}`,true))
+      dispatch(createBlog(newBlog))
+      dispatch(toggle())
+    } catch (err) {
+      dispatch(setNotifications(`Failed to add blog ${err}`, false))
+    }
+  };
 
   const clearForm = () => {
     setNewBlog({ title : '', author : '', url : '' })
