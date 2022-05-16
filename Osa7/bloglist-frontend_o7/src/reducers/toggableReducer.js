@@ -1,14 +1,14 @@
-import { createSlice } from "@reduxjs/toolkit"
+import { createSlice } from "@reduxjs/toolkit";
 
 const toggableSlice = createSlice({
-  name: 'blog',
+  name: "blog",
   initialState: false,
   reducers: {
     toggle(state, action) {
-      return !state
-    }
-  }
-})
+      return !state;
+    },
+  },
+});
 
-export default toggableSlice.reducer
-export const { toggle } = toggableSlice.actions
+export default toggableSlice.reducer;
+export const { toggle } = toggableSlice.actions;
