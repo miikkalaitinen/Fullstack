@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
-import { useDispatch } from 'react-redux'
+import { useDispatch } from "react-redux";
 import { setNotifications } from "./reducers/notificationReducer";
 import { initializeBlogs } from "./reducers/blogReducer";
-import  { Routes, Route, Link } from "react-router-dom"
+import { Routes, Route, Link } from "react-router-dom";
 import Blogs from "./components/Blogs";
 import Users from "./components/Users";
 import LoginForm from "./components/LoginForm";
@@ -13,26 +13,25 @@ import Notification from "./components/Notification";
 import Togglable from "./components/Togglable";
 
 const Main = () => {
-  return(
+  return (
     <>
-      <Blogs/>
+      <Blogs />
       <Togglable buttonLabel={"New note"}>
         <BlogForm />
       </Togglable>
     </>
-  )
-}
+  );
+};
 
 const App = () => {
-
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    dispatch(initializeBlogs())
+    dispatch(initializeBlogs());
   }, [dispatch]);
 
   useEffect(() => {
@@ -45,7 +44,7 @@ const App = () => {
   }, []);
 
   const notify = (message, type, seconds = 3) => {
-    dispatch(setNotifications(message, type, seconds*1000));
+    dispatch(setNotifications(message, type, seconds * 1000));
   };
 
   const handleLogin = async (e) => {
@@ -76,7 +75,7 @@ const App = () => {
 
   return (
     <div>
-      <Notification/>
+      <Notification />
       {!user ? (
         <LoginForm
           username={username}
@@ -92,9 +91,9 @@ const App = () => {
             <button onClick={handleLogout}> Logout </button>{" "}
           </p>
           <Routes>
-            <Route path="/" element={<Main />}/>
-            <Route path="/users" element={<Users />}/>
-            <Route path="/users/:id" element={<Main />}/>
+            <Route path="/" element={<Main />} />
+            <Route path="/users" element={<Users />} />
+            <Route path="/users/:id" element={<Main />} />
           </Routes>
         </>
       )}

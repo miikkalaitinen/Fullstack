@@ -1,16 +1,16 @@
-import { useDispatch, useSelector } from 'react-redux'
-import { toggle } from '../reducers/toggableReducer'
+import { useDispatch, useSelector } from "react-redux";
+import { toggle } from "../reducers/toggableReducer";
 
 const Togglable = (props) => {
-  const visible = useSelector(state => state.togglable)
-  const dispatch = useDispatch()
+  const visible = useSelector((state) => state.togglable);
+  const dispatch = useDispatch();
 
-  const hideWhenVisible = { display: visible ? 'none' : '' }
-  const showWhenVisible = { display: visible ? '' : 'none' }
+  const hideWhenVisible = { display: visible ? "none" : "" };
+  const showWhenVisible = { display: visible ? "" : "none" };
 
   const toggleVisibility = () => {
-    dispatch(toggle())
-  }
+    dispatch(toggle());
+  };
 
   return (
     <div>
@@ -22,9 +22,9 @@ const Togglable = (props) => {
         <button onClick={toggleVisibility}>cancel</button>
       </div>
     </div>
-  )
-}
+  );
+};
 
-Togglable.displayName = 'Togglable'
+Togglable.displayName = "Togglable";
 
-export default Togglable
+export default Togglable;

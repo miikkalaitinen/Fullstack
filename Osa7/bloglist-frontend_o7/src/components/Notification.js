@@ -1,17 +1,17 @@
-import './notification.css'
-import { useSelector } from 'react-redux'
+import "./notification.css";
+import { useSelector } from "react-redux";
 
 const Notification = () => {
+  const notification = useSelector((state) => state.notification);
 
-  const notification = useSelector(state => state.notification)
-
-  if (notification.message === null) return <p className={'notif hidden'}>hidden</p>
+  if (notification.message === null)
+    return <p className={"notif hidden"}>hidden</p>;
 
   return (
-    <p className={`notif ${notification.type ? 'confirm' : 'error'}`}>
+    <p className={`notif ${notification.type ? "confirm" : "error"}`}>
       {notification.message}
     </p>
-  )
-}
+  );
+};
 
-export default Notification
+export default Notification;
