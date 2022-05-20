@@ -48,33 +48,35 @@ const Authors = (props) => {
           )}
         </tbody>
       </table>
-      <h2>Set or Change Birthyear</h2>
-      <form onSubmit={handleSubmit}>
-        name
-        <select
-          value={targetAuthor}
-          onChange={({ target }) => setTargetAuthor(target.value)}
-        >
-          <option value="">Choose author</option>
-          {authors.loading ? (
-            <option value="">Loading...</option>
-          ) : (
-            authors.data.allAuthors.map((a) => (
-              <option key={a.name} value={a.name}>
-                {a.name}
-              </option>
-            ))
-          )}
-        </select>
-        <br />
-        born
-        <input
-          value={targetYear}
-          onChange={({ target }) => setTargetYear(target.value)}
-        ></input>
-        <br />
-        <button type="submit">Set Birthyear</button>
-      </form>
+      <br />
+      {props.token ? (
+        <form onSubmit={handleSubmit}>
+          name
+          <select
+            value={targetAuthor}
+            onChange={({ target }) => setTargetAuthor(target.value)}
+          >
+            <option value="">Choose author</option>
+            {authors.loading ? (
+              <option value="">Loading...</option>
+            ) : (
+              authors.data.allAuthors.map((a) => (
+                <option key={a.name} value={a.name}>
+                  {a.name}
+                </option>
+              ))
+            )}
+          </select>
+          <br />
+          born
+          <input
+            value={targetYear}
+            onChange={({ target }) => setTargetYear(target.value)}
+          ></input>
+          <br />
+          <button type="submit">Set Birthyear</button>
+        </form>
+      ) : null}
     </div>
   )
 }

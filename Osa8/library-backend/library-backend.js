@@ -47,7 +47,7 @@ const typeDefs = gql`
   type Query {
     bookCount: Int!
     authorCount: Int!
-    allBooks(author: String, genre: String): [Book!]!
+    allBooks(author: String, genre: String): [Book]!
     allAuthors: [Author!]!
     me: User
   }
@@ -126,12 +126,11 @@ const resolvers = {
     addBook: async (root, args, context) => {
       if (!context.currentUser) return null
 
-      if (Author.exists({ name: args.author }) === null) {
-        console.log('!')
+      if (!(await Author.exists({ name: args.author }))) {
         const newAuthor = await Author({ name: args.author, born: null })
 
         try {
-          newAuthor.save()
+          await newAuthor.save()
         } catch {
           throw new UserInputError(error.message, {
             invalidArgs: args,
@@ -139,9 +138,8 @@ const resolvers = {
         }
       }
 
-      console.log('!!')
-
       const author = await Author.findOne({ name: args.author })
+      console.log(author)
       const newBook = new Book({ ...args, author: author })
 
       try {
@@ -154,7 +152,7 @@ const resolvers = {
 
       return newBook
     },
-    editAuthor: async (root, { name, setBornTo }) => {
+    editAuthor: async (root, { name, setBornTo }, context) => {
       if (!context.currentUser) return null
 
       const author = await Author.findOne({ name: name })
