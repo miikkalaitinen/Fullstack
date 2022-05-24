@@ -1,4 +1,4 @@
-const calculateBmi = (height: number, weight: number): string => {
+export const calculateBmi = (height: number, weight: number): string => {
   if (height === 0) throw Error('Weight must not be 0');
   else {
     const bmi: number = weight / ((height / 100) * (height / 100));
@@ -10,12 +10,12 @@ const calculateBmi = (height: number, weight: number): string => {
   }
 };
 
-interface InputValues {
+export interface InputValues {
   weight: number;
   height: number;
 }
 
-const parseArguments = (args: Array<string>): InputValues => {
+export const parseArguments = (args: Array<string>): InputValues => {
   if (args.length < 4) throw new Error('Not enough arguments');
   if (args.length > 4) throw new Error('Too many arguments');
 

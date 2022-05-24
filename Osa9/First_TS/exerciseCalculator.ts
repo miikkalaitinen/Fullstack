@@ -8,7 +8,7 @@ interface Result {
   average?: number;
 }
 
-const calculateExercises = (hours: number[], target: number): Result => {
+export const calculateExercises = (hours: number[], target: number): Result => {
   const periodLength = hours.length;
   if (periodLength === 0) throw Error('Must have at least 1 day of training');
 
@@ -35,9 +35,10 @@ const calculateExercises = (hours: number[], target: number): Result => {
   };
 };
 
-const parseHours = (args: Array<string>): number[] => {
+export const parseHours = (args: Array<string>): number[] => {
   if (args.length < 3) throw new Error('Not enough arguments');
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_first, _second, ...rest] = args;
   const hours = rest.map((h) => Number(h));
 
