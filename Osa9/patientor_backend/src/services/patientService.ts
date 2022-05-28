@@ -1,5 +1,5 @@
-import patientData from '../../data/patiens.json';
-import { Patient, safePatient, newPatient } from '../../types';
+import patientData from '../../data/patiens';
+import { Patient, safePatient, newPatient } from '../types';
 import { v1 as uuid } from 'uuid';
 
 let patiens: Patient[] = patientData;
