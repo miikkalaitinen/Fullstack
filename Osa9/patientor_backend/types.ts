@@ -11,9 +11,10 @@ export type Patient = {
   ssn: string;
   gender: string;
   occupation: string;
+  entries: string[];
 };
 
-export type safePatient = Omit<Patient, 'ssn'>;
+export type safePatient = Omit<Patient, 'ssn' | 'entries'>;
 
 export type newPatient = Omit<Patient, 'id'>;
 

@@ -8,15 +8,15 @@ type Fields = {
   occupation: unknown;
 };
 
-export const toNewDiaryEntry = (object: Fields): newPatient => {
-  const isString = (text: any): string => {
-    if (typeof text === 'string') {
-      return text;
-    } else {
-      throw Error('Invalid parameters');
-    }
-  };
+export const isString = (text: any): string => {
+  if (typeof text === 'string') {
+    return text;
+  } else {
+    throw Error('Invalid parameters');
+  }
+};
 
+export const toNewPatientEntry = (object: Fields): newPatient => {
   const isGender = (text: any): text is Gender => {
     return Object.values(Gender).includes(text);
   };
@@ -34,6 +34,7 @@ export const toNewDiaryEntry = (object: Fields): newPatient => {
     ssn: isString(object.ssn),
     gender: parseGender(object.gender),
     occupation: isString(object.occupation),
+    entries: [],
   };
 
   return toNewDiaryEntry;

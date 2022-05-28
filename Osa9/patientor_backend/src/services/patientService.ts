@@ -10,6 +10,12 @@ export const getPatients = (): safePatient[] => {
   }));
 };
 
+export const getPatientByID = (id: string): Patient => {
+  const patient = patiens.find((patient) => patient.id === id);
+  if (patient) return patient;
+  else throw Error(`No patient with an id ${id}`);
+};
+
 export const addPatient = (patient: newPatient): Patient => {
   const patientToAdd = { ...patient, id: uuid() };
   patiens.push(patientToAdd);
