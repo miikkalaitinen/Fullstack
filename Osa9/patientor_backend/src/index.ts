@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { Request, Response, NextFunction } from 'express';
 import diagnoseRouter from './routes/diagnose';
 import patientRouter from './routes/patient';
 const cors = require('cors');
@@ -10,7 +10,14 @@ app.use(
     optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
   })
 );
+
 app.use(express.json());
+
+app.use((err: any, _req: Request, res: Response, next: NextFunction) => {
+  if (err.name === 'SyntaxError')
+    res.status(400).json({ error: 'Malformatted JSON' });
+  else next();
+});
 
 const PORT = 3001;
 

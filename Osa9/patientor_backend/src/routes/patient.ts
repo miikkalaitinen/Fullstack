@@ -3,10 +3,25 @@ import {
   getPatients,
   addPatient,
   getPatientByID,
+  addEntry,
 } from '../services/patientService';
-import { toNewPatientEntry, isString } from '../utils';
+import { toNewPatientEntry, isString, toNewDiagnoseEntry } from '../utils';
 
 const router = express.Router();
+
+router.post('/:id/entries', (req, res) => {
+  try {
+    const id = isString(req.params.id);
+    const entry = toNewDiagnoseEntry(req.body);
+    const newPatient = addEntry(id, entry);
+    console.log(entry);
+    res.json(newPatient);
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      res.status(400).send(error.message);
+    } else res.status(400).send('Some error appeared');
+  }
+});
 
 router.get('/:id', (req, res) => {
   try {
@@ -20,7 +35,13 @@ router.get('/:id', (req, res) => {
 });
 
 router.get('/', (_req, res) => {
-  res.json(getPatients());
+  try {
+    res.json(getPatients());
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      res.status(400).send(error.message);
+    } else res.status(400).send('Some error appeared');
+  }
 });
 
 router.post('/', (req, res) => {
